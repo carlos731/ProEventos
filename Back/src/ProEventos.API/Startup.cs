@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ProEventos.API.Data;
 
 namespace ProEventos.API
 {
@@ -26,7 +28,13 @@ namespace ProEventos.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            // services.AddDbContext<DataContext>(
+            //     context => context.UseSqlite(Configuration.GetConnectionString("Default"))
+            // );
+            services.AddDbContext<DataContext>(
+                context => context.UseMySql("server=localhost;initial catalog=ProEventos;uid=root;pwd=1234",
+                Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.28"))
+            );
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
